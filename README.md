@@ -14,4 +14,9 @@ The To-Do list web app allows users to:
   * Toggle light/dark mode
 
 ## Live Demo
-![To-Do list](https://github.com/user-attachments/assets/5f55e142-616c-4fed-baea-6d9c7c859a2e)
+
+
+https://github.com/user-attachments/assets/ad06bbd9-0d6e-48a6-ae69-6497ec343c71
+
+
+
