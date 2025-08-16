@@ -1,4 +1,4 @@
-# To-Do-List App (Team project)
+# To-Do List App (Team project)
 
 This project was developed as part of CIS 334: web programing class.
 
