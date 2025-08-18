@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/clientSide/main.css">
+  <title>To-Do List</title>
+</head>
+
+<body>
+
+  <!-- toggle switch-->
+  <div id="themeSwitch">
+    <label class="switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="topRight" style="position: relative;">
+
+    <!-- Reminder-->
+    <div id="reminderContainer" style="position: relative;">
+      <button type="button" id="reminder" class="icon-button">
+        <span class="material-icons">Reminder</span>
+        <span class="icon-button__badge"></span>
+      </button>
+
+      <div id="reminderPanel" class="hidden">
+        <h4>Tasks Due Today</h4>
+        <ul id="reminderList"></ul>
+      </div>
+    </div>
+
+  </div>
+
+  <h1> To-Do List</h1>
+
+  <div id="mainTaskBox">
+
+    <!-- Switch between which types of tasks you're currently looking at -->
+    <div>
+      <button class="Buttons" id="daily">Daily</button>
+      <button class="Buttons" id="weekly">Weekly</button>
+      <button class="Buttons" id="monthly">Monthly</button>
+      <button class="Buttons" id="all">All</button>
+    </div>
+
+    <!-- completed task -->
+    <div id="completedTask">
+      <p><span id="completedCount">0</span> / <span id="totalCount">0</span> Completed Tasks</p>
+
+    </div>
+
+    <form id="taskForm">
+      <!-- Input for adding new tasks -->
+    <div id="form">
+      <input type="text" id="taskInput" placeholder="Enter a new task" autocomplete="off" autofocus required>
+      <span class="asterisk">*</span>
+      <button class="Buttons" id="addTask">Add</button>
+    </div>
+
+    <!-- time and date-->
+    <div id="date">
+      <label for="dateTime">Select a date:</label>
+      <input type="datetime-local" id="dateTime" name="dateTime" required>
+      <span class="asterisk">*</span>
+    </div>
+    </form>
+
+    <!-- Task format-->
+    <ul id="taskList"></ul>
+
+    <!-- contains all the added tasks-->
+    <div id="taskHolder" class="task-box"></div>
+
+  </div>
+
+  <script src="/clientSide/app.js"></script>
+  
+</body>
+
+</html>

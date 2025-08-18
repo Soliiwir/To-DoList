@@ -1,0 +1,258 @@
+/* different backgrounds */
+:root {
+   --bg-color: rgb(215, 232, 255);
+   --input-bg: rgb(224, 255, 255);
+   --buttons-bg: rgb(247, 216, 178);
+   --text-color: black;
+   --border-color: black;
+   --showdow-bg: 0px 0px 7px 2px rgba(176, 180, 182, 0.795);
+   --toggle-bg: #666;
+   --toggle-handle-bg: #fff;
+   --blue-accent:#66b2ff;
+   --buttons-hover: rgb(245, 180, 110);
+}
+
+body.dark-mode {
+   --bg-color: black;
+   --input-bg: rgb(36, 37, 37);
+   --buttons-bg: rgb(247, 197, 137);
+   --text-color: white;
+   --border-color: rgb(176, 180, 182, 0.795);
+   --showdow-bg: 0px 0px 7px 2px rgba(154, 157, 158, 0.795);
+   --toggle-bg: #666;
+   --toggle-handle-bg: #fff;
+   --blue-accent:#66b2ff;
+   --buttons-hover: rgb(245, 180, 110);
+}
+
+body {
+   background-color: var(--bg-color);
+   display: block;
+   text-align: center;
+   align-items: center;
+   font-size: 1.5em;
+   color: var(--text-color);
+   transition: background-color 0.4s, color 0.4s;
+}
+
+/* toogle button style*/
+#themeSwitch {
+   position: fixed;
+   top: 10px;
+   right: 10px;
+   z-index: 1000;
+}
+
+.switch {
+   position: relative;
+   display: inline-block;
+   width: 60px;
+   height: 34px;
+
+}
+.switch input{
+   opacity: 0;
+   width: 0;
+   height: 0;
+}
+
+.slider {
+   position: absolute;
+   cursor: pointer;
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   background-color: var(--toggle-bg);
+   transform: 0.4s;
+   border-radius: 34px;
+}
+.slider::before{
+   position: absolute;
+   content: "";
+   height: 26px;
+   width: 26px;
+   left: 4px;
+   bottom: 4px;
+   background-color: var(--toggle-handle-bg);
+   transform: 0.4s;
+   border-radius: 50%;
+}
+input:checked +.slider{
+   background-color: var(--blue-accent);
+}
+input:checked +.slider::before{
+   transform: translate(26px);
+}
+
+#themeToggle {
+   margin: 1rem 0 1rem 0;
+}
+
+/*reminder */
+
+#reminderPanel {
+   position: absolute;
+   transform: translate(245%, 0%);
+   max-height: 200px;
+   overflow-y: auto;
+   background-color: var(--input-bg);
+   padding: 0 1em 1em 1em;
+   margin: 1em 0 1em 0;
+   border: 2px solid #ccc;
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+   text-align: left;
+   z-index: 1000;
+}
+
+#reminderPanel h5 {
+   text-align: left;
+   color: var(--text-color);
+}
+
+.topRight {
+   position: relative;
+}
+
+/*button style */
+.Buttons {
+   background-color: var(--buttons-bg);
+   text-decoration: none;
+   border-style: none;
+   box-shadow: 0px 0px 7px 2px rgba(148, 148, 148, 0.795);
+   font-size: 1em;
+}
+
+.Buttons:hover {
+   background-color: var(--buttons-hover);
+}
+
+.Buttons.active {
+   background-color: rgb(245, 180, 110);
+}
+
+.icon-button {
+   background-color: var(--buttons-bg);
+   padding: .5rem;
+   border: none;
+   cursor: pointer;
+   transition: background-color 0.3s ease;
+   box-shadow: 0px 0px 7px 2px rgba(148, 148, 148, 0.795);
+}
+
+.icon-button:hover {
+   background-color: var(--buttons-hover);
+}
+
+/* task filter */
+#daily,
+#weekly,
+#monthly,
+#reminder {
+   margin: 0 1em 1em 1em;
+}
+
+/*complete task */
+#completedTask {
+   background-color: rgb(119, 176, 255);
+   display: inline-block;
+   padding: 0 1em 0 1em;
+   color: aliceblue;                                          
+}
+
+/* input section*/
+#form {
+   padding: 1em;
+   font-size: 1em;
+
+}
+
+.task-text {
+   color: rgb(2, 89, 211);
+}
+
+#taskInput, #datetime {
+   background-color: var(--input-bg);
+   color: var(--text-color);
+   padding: 1rem;
+   border-radius: 1rem;
+   margin-right: 1rem;
+   border: 1px solid var(--border-color);
+   box-shadow: var(--showdow-bg);
+}
+
+#date {
+   padding: 1em;
+   font-size: 1em;
+
+}
+
+/* task list*/
+#taskList li {
+   width: 30rem;
+   margin: auto;
+   margin-bottom: 1rem;
+   padding: 1rem;
+   background-color: var(--input-bg);
+   border-radius: 1rem;
+   box-shadow: 0px 0px 7px 2px rgba(176, 180, 182, 0.795);
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+
+#taskList li.task-item {
+   display: flex;
+   justify-content: space-between;
+   gap: 1rem;
+}
+
+.task-content {
+   display: flex;
+   align-items: center;
+   justify-content: flex-start;
+   gap: 0.75rem;
+   flex: 1;
+
+}
+
+.task-content input[type="checkbox"] {
+   transform: scale(1.5);
+   cursor: pointer;
+}
+
+/* edit and delete*/
+.edit-icon {
+   width: 30px;
+   height: 30px;
+   cursor: pointer;
+   transition: transform 1s;
+}
+
+.edit-icon:hover {
+   transform: scale(1.2);
+}
+
+.delete-icon {
+   width: 30px;
+   height: 30px;
+   cursor: pointer;
+   transition: transform 1s;
+}
+
+.delete-icon:hover {
+   transform: scale(1.2);
+}
+
+.icon-container {
+   display: flex;
+   gap: 1rem;
+}
+
+.hidden {
+   display: none;
+}
+
+.asterisk {
+   color: red;
+}
