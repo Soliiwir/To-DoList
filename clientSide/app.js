@@ -1,4 +1,4 @@
-"use strict";
+"use strict"; 
 
 let tasks = [];
 let currentFilter = "all";
@@ -399,5 +399,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     renderTasks();
 });
+
 
 
