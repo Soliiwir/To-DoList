@@ -1,4 +1,4 @@
-"use strict"; 
+"use strict";
 
 let tasks = [];
 let currentFilter = "all";
@@ -6,7 +6,7 @@ let currentFilter = "all";
 // Save tasks to server
 const saveTasks = async () => {
     try {
-        await fetch("http://localhost:3000/tasks", {
+        await fetch("/tasks", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(tasks)
@@ -19,7 +19,7 @@ const saveTasks = async () => {
 // Load tasks from server
 const loadTasks = async () => {
     try {
-        const response = await fetch("http://localhost:3000/tasks");
+        const response = await fetch("/tasks");
         if (!response.ok) throw new Error("Failed to load tasks");
         tasks = await response.json();
     } catch (error) {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const totalCount = document.querySelector("#totalCount"); // Total tasks
 
     const saveAndRender = async () => {
-        await saveTasks(tasks);
+        await saveTasks();
         renderTasks(currentFilter);
     };
 
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         taskList.innerHTML = ""; // Clears task list display
         currentFilter = filterType;
 
-        // filter tasks by date
+ // filter tasks by date
         let filteredTasks = tasks;
         if (filterType === "daily") {
             filteredTasks = tasks.filter(task => todaysTask(task.date));
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let completedTasks = 0;
 
-        // Add each task as <li> element 
+        // Add each task as <li> element
         filteredTasks.forEach((task, index) => {
             const li = document.createElement("li");
             li.classList.add("task-item");
@@ -78,10 +78,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
             checkbox.checked = task.completed
-            checkbox.addEventListener("change", () => {
+            checkbox.addEventListener("change", async() => {
                 task.completed = checkbox.checked;
-                saveTasks();
-                renderTasks(currentFilter);
+                await saveAndRender();
             });
 
             // Create task text and date span
@@ -114,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             editButton.src = "/icons/edit.png";
             editButton.alt = "Edit";
             editButton.classList.add("edit-icon");
-            editButton.addEventListener("click", () => {
+            editButton.addEventListener("click", async() => {
                 let newText;
                 let newDate;
 
@@ -123,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     newText = prompt("Edit your task:", task.text);
                     if (newText === null) {
                         return;
-                    }
+ }
                     newText = newText.trim();
                     if (newText !== "") {
                         break;
@@ -140,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const parseDate = new Date(newDate);
                     const now = new Date();
 
-                    if (isNaN(parseDate.getTime())) { 
+                    if (isNaN(parseDate.getTime())) {
                             alert("Please enter valid date/time such as '2025-08-5T12:00");
                             continue;
                         }
@@ -149,14 +148,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                             alert("Can't choose a date or time in the past.");
                             continue;
                         }
-                
+
                     break;
                 };
 
                 task.text = newText;
                 task.date = newDate;
-                saveTasks();
-                renderTasks(currentFilter);
+                await saveAndRender();
             });
 
             // Create delete icon button
@@ -164,13 +162,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             deleteButton.src = "/icons/delete.png";
             deleteButton.alt = "Delete";
             deleteButton.classList.add("delete-icon");
-            deleteButton.addEventListener("click", () => {
+            deleteButton.addEventListener("click", async () => {
                 const realIndex = tasks.indexOf(task);
                 if (realIndex > -1) {
                     tasks.splice(realIndex, 1);
                 }
-                saveTasks();
-                renderTasks(currentFilter);
+                await saveAndRender();
             });
 
             // Wraps delete + edit buttons together on the right side
@@ -186,13 +183,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             // Add list item to task list
             taskList.appendChild(li);
         });
-
-        // Updates completed tasks box
+ // Updates completed tasks box
         completedCount.textContent = completedTasks;
         totalCount.textContent = filteredTasks.length;
     };
 
-    // Adds task with "Add Button" 
+    // Adds task with "Add Button"
     const addTask = async () => {
         console.log("Add button clicked");
         const text = input.value.trim();
@@ -218,18 +214,17 @@ document.addEventListener("DOMContentLoaded", async function () {
                 return;
             }
 
-            let newTask = {}
-            newTask.text = text;
-            newTask.date = dateInput;
-            newTask.completed = false;
+            let newTask = {
+            text: text,
+            date: dateInput,
+            completed: false
+            };
 
             tasks.push(newTask);
             await saveAndRender();
-    
+
             input.value = "";
             dateInputField.value = "";
-
-            renderTasks();
         }
         catch (e) {
             console.log(`${e.name}: ${e.message}`);
@@ -248,9 +243,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // load tasks from server before rendering
     await loadTasks();
-    renderTasks();
-
-    // Daily task display
+ // Daily task display
     const todaysTask = (date) => {
         const today = new Date();
         const taskDate = new Date(date);
@@ -289,14 +282,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         );
     };
 
-    // all tasks display
-    const allTask = (date) => {
-        const now = new Date();
-        const taskDate = new Date(date);
-
-        return taskDate;
-    };
-
 
     // display tasks that are due 12 hours from now
     const showDueTasks = () => {
@@ -316,8 +301,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 dueSoonTasks.push(task);
             }
         }
-
-        reminderList.innerHTML = "";
+ reminderList.innerHTML = "";
 
         if (dueSoonTasks.length === 0) {
             reminderList.innerHTML = "<li>No tasks due within 12 hours.</li>";
@@ -383,8 +367,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         evt.preventDefault();
         addTask();
     });
-    
-    input.addEventListener("keydown", addTaskFromEnter);
+  input.addEventListener("keydown", addTaskFromEnter);
 
     dateInputField.addEventListener("keydown", addTaskFromEnter);
 
@@ -397,8 +380,5 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     themeToggle.addEventListener("change", switchTheme);
 
-    renderTasks();
+        
 });
-
-
-
