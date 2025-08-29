@@ -1,13 +1,16 @@
-const fs = require("fs");
 const path = require("path");
 const express = require("express");
+const AWS = require ("aws-sdk");
 
 // Create an Express app
 const app = express();
 const PORT = 3000;  // number to run the server
 
-// Define path where tasks will be saved
-const taskFile = path.join(__dirname, "tasks.json");
+// AWS setup
+AWS.config.update({ region: "us-east-1"});
+const s3 = new AWS.S3();
+const BUCKET = "task-inputs";
+const FILE_KEY = "tasks.json";
 
 // Middleware to parse JSON data
 app.use(express.json());
@@ -16,42 +19,43 @@ app.use(express.json());
 app.use('/clientSide', express.static(path.join(__dirname, '..', 'clientSide')));
 app.use('/icons', express.static(path.join(__dirname, '..', 'icons')));
 
-// serve index.html at root
 app.get('/', (request, response) => {
     response.sendFile(path.join(__dirname, '..', 'clientSide', 'index.html'));
 });
 
-// Route to load tasks
-app.get("/tasks", (request, response) => {
-    // Read the tasks.json file
-    fs.readFile(taskFile, "utf-8", (error, data) => {
-        if(error) {
-            console.error("Error reading the tasks:", error);
-            return response.status(500).send("Could not read tasks");
+// load taskks from s3
+app.get("/tasks", async (request, response) => {
+    try {
+        const data = await s3.getObject({ Bucket: BUCKET, Key: FILE_KEY }).promise();
+        const tasks = JSON.parse(data.Body.toString("utf-8"));
+        response.json(tasks);
+    } catch (error) {
+        if (error.code === "NoSuchKey") {
+            return response.json([]); // empty if no tasks yet
         }
-
-        // Parse the file contents or default to empty array
-        const tasks = data ? JSON.parse(data) : [];
-        response.json(tasks); // Send tasks back to the frontend
-    });
+        console.error("Error reading tasks:", error);
+        response.status(500).send("Could not read tasks");
+    }
 });
 
-// Route to save tasks (POST /tasks)
-app.post("/tasks", (request, response) => {
-    const tasks = request.body;  // Get tasks from request body
-
-    // Write tasks to tasks.json file 
-    fs.writeFile(taskFile, JSON.stringify(tasks, null, 2), (error) => {
-        if (error) {
-            console.error("Error writing tasks:", error);
-            return response.status(500).send("Could not save tasks.");
-        }
-
+// Save tasks to S3
+app.post("/tasks", async (request, response) => {
+    const tasks = request.body;
+    try {
+        await s3.putObject({
+            Bucket: BUCKET,
+            Key: FILE_KEY,
+            Body: JSON.stringify(tasks, null, 2),
+            ContentType: "application/json",
+        }).promise();
         response.send("Tasks saved successfully!");
-    });
+    } catch (error) {
+        console.error("Error writing tasks:", error);
+        response.status(500).send("Could not save tasks");
+    }
 });
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+// Start server
+app.listen(3000, "0.0.0.0", () => {
+    console.log("Server running at http://0.0.0.0:3000");
 });
