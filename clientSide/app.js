@@ -243,6 +243,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // load tasks from server before rendering
     await loadTasks();
+    renderTasks();
  // Daily task display
     const todaysTask = (date) => {
         const today = new Date();
@@ -382,3 +383,4 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         
 });
+
