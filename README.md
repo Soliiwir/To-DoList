@@ -3,6 +3,7 @@
 This project was developed as part of CIS 334: web programing class.
 
 It is a full-stack application built to practice Node.js, javascript, HTML, CSS and Agile development principles.
+The backend was deployed to AWS EC2 with Nginx reverse proxy and S3 to sotre the task instead of using local storage.
 
 ## Project Overiew
 
